@@ -76,6 +76,9 @@ libespeak_FLAGS  =
 libespeak_SOURCE = \
 	src/speak_lib.cpp \
 	src/debug.cpp
+if NO_SEM_TIMEDWAIT
+libespeak_SOURCE += src/sem_timedwait.cpp
+endif
 
 espeakedit_SOURCE = \
 	src/compiledata.cpp \

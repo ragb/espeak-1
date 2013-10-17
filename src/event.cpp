@@ -31,6 +31,9 @@
 #include <sys/time.h>
 #include <errno.h>
 
+#ifdef __APPLE__
+#include "sem_timedwait.h"
+#endif
 #include "speech.h"
 #include "speak_lib.h"
 #include "event.h"
