@@ -174,6 +174,12 @@ AM_CONDITIONAL(OPT_SONIC,  [test x"$have_sonic"  = xyes])
 AM_CONDITIONAL(OPT_ASYNC,  [test x"$have_async"  = xyes])
 
 dnl ================================================================
+dnl OSX checks.
+dnl ================================================================
+
+AM_CONDITIONAL(NO_SEM_TIMEDWAIT, [test `uname` = "Darwin"])
+
+dnl ================================================================
 dnl wxWidgets checks.
 dnl ================================================================
 
