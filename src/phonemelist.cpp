@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2014 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -398,6 +398,14 @@ void MakePhonemeList(Translator *tr, int post_pause, int start_sentence)
 		if(ph == NULL) continue;
 
 		InterpretPhoneme(tr, 0x100, plist3, &phdata, &worddata);
+
+		if((alternative = phdata.pd_param[pd_CHANGE_NEXTPHONEME]) > 0)
+		{
+			ph_list3[j+1].ph = phoneme_tab[alternative];
+			ph_list3[j+1].phcode = alternative;
+			ph_list3[j+1].type = phoneme_tab[alternative]->type;
+			next = phoneme_tab[alternative];
+		}
 
 		if(((alternative = phdata.pd_param[pd_INSERTPHONEME]) > 0) && (inserted == 0))
 		{

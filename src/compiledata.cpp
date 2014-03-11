@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2005 to 2013 by Jonathan Duddington                     *
+ *   Copyright (C) 2005 to 2014 by Jonathan Duddington                     *
  *   email: jonsd@users.sourceforge.net                                    *
+ *   Copyright (C) 2013 by Reece H. Dunn                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -124,6 +125,7 @@ static keywtab_t k_properties[] = {
 	{"isVFricative", 0,  phVFRICATIVE},
 
 	{"isPalatal",    0,  i_isPalatal},
+	{"isLong",       0,   i_isLong},
 	{"isRhotic",     0,  i_isRhotic},
 	{"isSibilant",   0,  i_isSibilant},
 	{"isFlag1",      0,  i_isFlag1},
@@ -292,7 +294,7 @@ static keywtab_t keywords[] = {
 	{"Continue",   tSTATEMENT, kCONTINUE},
 
 	{"ChangePhoneme", tINSTRN1, i_CHANGE_PHONEME},
-	{"ReplaceNextPhoneme", tINSTRN1, i_REPLACE_NEXT_PHONEME},
+	{"ChangeNextPhoneme", tINSTRN1, i_REPLACE_NEXT_PHONEME},
 	{"InsertPhoneme", tINSTRN1, i_INSERT_PHONEME},
 	{"AppendPhoneme", tINSTRN1, i_APPEND_PHONEME},
 	{"IfNextVowelAppend", tINSTRN1, i_APPEND_IFNEXTVOWEL},
@@ -990,6 +992,10 @@ static wxString CompileAllDictionaries()
 
 	sprintf(fname_log,"%s%s",path_dsource,"dict_log");
 	log = fopen(fname_log,"w");
+	if(log != 0)
+	{
+		fprintf(log, "%s", utf8_bom);
+	}
 	sprintf(fname_log,"%s%s",path_dsource,"dict_phonemes");
 	f_phused = fopen(fname_log,"w");
 
@@ -1126,6 +1132,9 @@ static unsigned int StringToWord(const char *string)
 	int  ix;
 	unsigned char c;
 	unsigned int word;
+
+	if(string==NULL)
+		return(0);
 
 	word = 0;
 	for(ix=0; ix<4; ix++)
@@ -2407,6 +2416,9 @@ int CompileIf(int elif)
 		else
 		{
 			error("Unexpected keyword '%s'",item_string);
+
+			if((strcmp(item_string, "phoneme") == 0) || (strcmp(item_string, "endphoneme") == 0))
+				return(-1);
 		}
 
 		// output the word
